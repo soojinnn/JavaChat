@@ -46,11 +46,11 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
   public JTextArea messages;
   public JTextField message;
   
-  //ì¶”ê°€
+  //Ãß°¡
 
   
   public ChatRoomDisplay(ClientThread thread){
-    super("Chat-Application-ëŒ€í™”ë°©");
+    super("Chat-Application-´ëÈ­¹æ");
 
     cr_thread = thread;
     isSelected = false;
@@ -64,7 +64,7 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
     p.setLayout(null);
     p.setBounds(425, 10, 140, 175);
     p.setBorder(new TitledBorder(
-      new EtchedBorder(EtchedBorder.LOWERED), "ì°¸ì—¬ì"));
+      new EtchedBorder(EtchedBorder.LOWERED), "Âü¿©ÀÚ"));
 
 
     roomerInfo = new JList();
@@ -80,7 +80,7 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
     p.setLayout(null);
     p.setBounds(10, 10, 410, 340);
     p.setBorder(new TitledBorder(
-      new EtchedBorder(EtchedBorder.LOWERED), "ì±„íŒ…ì°½"));
+      new EtchedBorder(EtchedBorder.LOWERED), "Ã¤ÆÃÃ¢"));
 
     view = new JViewport();
     messages = new JTextArea();
@@ -101,35 +101,35 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
 
     c.add(p);
 
-    coerceOut = new JButton("ê°• ì œ í‡´ ì¥");
+    coerceOut = new JButton("°­ Á¦ Åğ Àå");
     coerceOut.setFont(font);
     coerceOut.addActionListener(this);
     coerceOut.setBounds(445, 195, 100, 30);
     coerceOut.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
     c.add(coerceOut);
 
-    sendWord = new JButton("ê·“ë§ë³´ë‚´ê¸°");
+    sendWord = new JButton("±Ó¸»º¸³»±â");
     sendWord.setFont(font);
     sendWord.addActionListener(this);
     sendWord.setBounds(445, 235, 100, 30);
     sendWord.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
     c.add(sendWord);
 
-    sendFile = new JButton("íŒŒ ì¼ ì „ ì†¡");
+    sendFile = new JButton("ÆÄ ÀÏ Àü ¼Û");
     sendFile.setFont(font);
     sendFile.addActionListener(this);
     sendFile.setBounds(445, 275, 100, 30);
     sendFile.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
     c.add(sendFile);
 
-    quitRoom = new JButton("í‡´ ì‹¤ í•˜ ê¸°");
+    quitRoom = new JButton("Åğ ½Ç ÇÏ ±â");
     quitRoom.setFont(font);
     quitRoom.addActionListener(this);
     quitRoom.setBounds(445, 315, 100, 30);
     quitRoom.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
     c.add(quitRoom);
     
-    secretsendWord = new JButton("ë¹„ë°€ë©”ì‹œì§€ì „ì†¡");
+    secretsendWord = new JButton("ºñ¹Ğ¸Ş½ÃÁöÀü¼Û");
     secretsendWord.setFont(font);
     secretsendWord.addActionListener(this);
     secretsendWord.setBounds(445, 355, 100, 30);
@@ -195,11 +195,11 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
   public void actionPerformed(ActionEvent ae){
     if (ae.getSource() == coerceOut) {
       if (!isAdmin) {
-        JOptionPane.showMessageDialog(this, "ë‹¹ì‹ ì€ ë°©ì¥ì´ ì•„ë‹™ë‹ˆë‹¤.",
-                        "ê°•ì œí‡´ì¥", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "´ç½ÅÀº ¹æÀåÀÌ ¾Æ´Õ´Ï´Ù.",
+                        "°­Á¦ÅğÀå", JOptionPane.ERROR_MESSAGE);
       } else if (!isSelected) {
-        JOptionPane.showMessageDialog(this, "ê°•ì œí‡´ì¥ IDë¥¼ ì„ íƒí•˜ì„¸ìš”.",
-                        "ê°•ì œí‡´ì¥", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "°­Á¦ÅğÀå ID¸¦ ¼±ÅÃÇÏ¼¼¿ä.",
+                        "°­Á¦ÅğÀå", JOptionPane.ERROR_MESSAGE);
       } else {
         cr_thread.requestCoerceOut(idTo);
         isSelected = false;
@@ -208,18 +208,18 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
       cr_thread.requestQuitRoom();
     } else if (ae.getSource() == sendWord) {
       String idTo, data;
-      if ((idTo = JOptionPane.showInputDialog("ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”.")) != null){
-        if ((data = JOptionPane.showInputDialog("ë©”ì„¸ì§€ë¥¼ ì…ë ¥í•˜ì„¸ìš”.")) != null) {
+      if ((idTo = JOptionPane.showInputDialog("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.")) != null){
+        if ((data = JOptionPane.showInputDialog("¸Ş¼¼Áö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.")) != null) {
           cr_thread.requestSendWordTo(data, idTo);
         }
       }
     } else if (ae.getSource() == sendFile) {
       String idTo;
-      if ((idTo = JOptionPane.showInputDialog("ìƒëŒ€ë°© ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”.")) != null){
+      if ((idTo = JOptionPane.showInputDialog("»ó´ë¹æ ¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.")) != null){
         cr_thread.requestSendFile(idTo);
       }
     }
-    //ë¹„ë°€ë©”ì„¸ì§€ë³´ë‚´ê¸° ì¶”ê°€
+    //ºñ¹Ğ¸Ş¼¼Áöº¸³»±â Ãß°¡
     if(ae.getSource()==secretsendWord) {
     	
     	String secretwords = message.getText();

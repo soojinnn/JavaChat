@@ -112,7 +112,6 @@ class WaitRoomDisplay extends JFrame implements ActionListener,KeyListener,
     view = new JViewport();
     messages = new JTextArea();
     messages.setEditable(false);
-    messages.setLineWrap(true); //¡Ÿ≥—±Ë 
     messages.setFont(font);   
     view.add(messages);
     view.addChangeListener(this);
@@ -162,7 +161,7 @@ class WaitRoomDisplay extends JFrame implements ActionListener,KeyListener,
     c.add(logout);
 
     Dimension dim = getToolkit().getScreenSize();
-    setSize(640, 460);
+    setSize(640, 480);
     setLocation(dim.width/2 - getWidth()/2,
                 dim.height/2 - getHeight()/2);
     show();

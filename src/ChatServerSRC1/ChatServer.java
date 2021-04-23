@@ -19,6 +19,8 @@ public class ChatServer
           client = new ServerThread(sock);
           client.start();
         } catch(IOException e){
+        	
+        	
           System.out.println(e);
           try{
             if(sock != null) sock.close();
@@ -26,6 +28,7 @@ public class ChatServer
             System.out.println(e1);
           }finally{
             sock = null;
+            
           }
         }
       }

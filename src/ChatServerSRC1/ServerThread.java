@@ -52,6 +52,14 @@ public class ServerThread extends Thread
   private static final int ERR_PASSWORD = 3022;
   private static final int ERR_REJECTION = 3031;
   private static final int ERR_NOUSER = 3032;
+  
+  
+  private static final int REQ_SECRETSENDWORD = 4051;// 
+	private static final int REQ_SECRETSENDWORDTO = 4052;
+	private static final int YES_SECRETSENDWORD = 5051;// 
+	private static final int YES_SECRETSENDWORDTO = 5052;
+	
+  
 
   public ServerThread(Socket sock){
     try{
@@ -284,6 +292,7 @@ public class ServerThread extends Thread
               st_buffer.append(SEPARATOR);
               st_buffer.append(st_roomNumber);
               st_buffer.append(SEPARATOR);
+              st_buffer.append("귓말누가보낸거야");
               try{
                 String data = st.nextToken();
                 st_buffer.append(data);
@@ -302,6 +311,30 @@ public class ServerThread extends Thread
               break;
             }
           }
+          //추가
+          case REQ_SECRETSENDWORD : {
+              String id = st.nextToken();
+              int roomNumber = Integer.parseInt(st.nextToken());
+
+              st_buffer.setLength(0);
+              st_buffer.append(YES_SECRETSENDWORD);
+              st_buffer.append(SEPARATOR);
+              st_buffer.append(id);
+              st_buffer.append(SEPARATOR);
+              st_buffer.append(st_roomNumber);
+              st_buffer.append(SEPARATOR);
+             // st_buffer.append("REQ_SECRETSENDWORD 되고있음");
+              try{
+                String data = st.nextToken();
+                st_buffer.append(data);
+              }catch(NoSuchElementException e){}
+
+              broadcast(st_buffer.toString(), roomNumber);
+              break;
+            }
+            
+          //추가끝
+          
           case REQ_SENDFILE : {
             String id = st.nextToken();
             int roomNumber = Integer.parseInt(st.nextToken());
