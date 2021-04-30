@@ -78,7 +78,7 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
 
     p = new JPanel();
     p.setLayout(null);
-    p.setBounds(10, 10, 410, 340);
+    p.setBounds(10, 50, 410, 340);
     p.setBorder(new TitledBorder(
       new EtchedBorder(EtchedBorder.LOWERED), "채팅창"));
 
@@ -135,6 +135,10 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
     secretsendWord.setBounds(445, 355, 100, 30);
     secretsendWord.setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
     c.add(secretsendWord);
+    
+    JLabel label = new JLabel("");
+    label.setBounds(27, 10, 62, 18);
+    getContentPane().add(label);
 
     Dimension dim = getToolkit().getScreenSize();
     setSize(580, 450);
@@ -221,24 +225,21 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener,
     }
     //비밀메세지보내기 추가
     if(ae.getSource()==secretsendWord) {
+    	String data = message.getText();
     	
-    	String secretwords = message.getText();
-    	
-    	String [] secretwordsTest=secretwords.split("");
-    	String secretData = "";
-    	for(int i=0; i<secretwordsTest.length;i++) {
-    		secretData = secretData + (secretwordsTest[i]+i);
-    	}
+    	//String data = "";
+//    	for(int i=0; i<secretwordsTest.length;i++) {
+//    		secretData = secretData + (secretwordsTest[i]+i);
+//    	}
     	String idTo;
-        if(secretData.startsWith("/w")){
-          StringTokenizer st = new StringTokenizer(secretData, " ");
+        if(data.startsWith("/w")){
+          StringTokenizer st = new StringTokenizer(data, " ");
           String command = st.nextToken();
           idTo = st.nextToken();
-          secretData=st.nextToken();
-          cr_thread.requestSecretSendWordTo(secretData, idTo);
+          data=st.nextToken();
           message.setText("");
         } else {
-          cr_thread.requestSecretSendWord(secretData,secretwords);
+          cr_thread.requestSecretSendWord(data);
           message.requestFocusInWindow();
         }
     }
