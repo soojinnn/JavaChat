@@ -11,13 +11,15 @@ public class ClientThread extends Thread {
 	private WaitRoomDisplay ct_waitRoom;
 	private ChatRoomDisplay ct_chatRoom;
 	private Socket ct_sock;
-	private DataInputStream ct_in;
+	private DataInputStream ct_in,ct_in2;
 	private DataOutputStream ct_out;
 	private StringBuffer ct_buffer;
 	private Thread thisThread;
 	private String ct_logonID;
 	private int ct_roomNumber;
 	private static MessageBox msgBox, logonbox, fileTransBox;
+	
+	  private Random rn = new Random(); //랜덤함수객체
 
 	private static final String SEPARATOR = "|";
 	private static final String DELIMETER = "'";
@@ -60,9 +62,7 @@ public class ClientThread extends Thread {
 	
 	
 	private static final int REQ_SECRETSENDWORD = 4051;// 
-	private static final int REQ_SECRETSENDWORDTO = 4052;
 	private static final int YES_SECRETSENDWORD = 5051;// 
-	private static final int YES_SECRETSENDWORDTO = 5052;
 	
 	
 	
@@ -103,6 +103,7 @@ public class ClientThread extends Thread {
 			while (currThread == thisThread) {
 				String recvData = ct_in.readUTF();
 				StringTokenizer st = new StringTokenizer(recvData, SEPARATOR);
+				
 				int command = Integer.parseInt(st.nextToken());
 				switch (command) {
 				case YES_LOGON: {
@@ -339,21 +340,22 @@ public class ClientThread extends Thread {
 					try {
 						
 						String secretData = st.nextToken();
-		
-						if (roomNumber == 0) {
-							ct_waitRoom.messages.append(id + " : (쉿!) " + secretData + "\n");
-							if (id.equals(ct_logonID)) {
-								ct_waitRoom.message.setText("");
-								ct_waitRoom.message.requestFocusInWindow();
-							}
-							ct_waitRoom.message.requestFocusInWindow();
-						} else {
-							ct_chatRoom.messages.append(id + " : (쉿!) " + secretData + "\n");
+						
+//						if (roomNumber == 0) {
+//							ct_waitRoom.messages.append(id + " : (쉿! 비밀메시지) " + secretData + "\n");
+//							if (id.equals(ct_logonID)) {
+//								ct_waitRoom.message.setText("");
+//								ct_waitRoom.message.requestFocusInWindow();
+//							}
+//							ct_waitRoom.message.requestFocusInWindow();
+//						} 
+//						else {
+							ct_chatRoom.messages.append(id + " : (쉿! 비밀메시지) " + secretData + "\n");
 							if (id.equals(ct_logonID)) {
 								ct_chatRoom.message.setText("");
 							}
 							ct_chatRoom.message.requestFocusInWindow();
-						}
+//						}
 
 					} catch (NoSuchElementException e) {
 						if (roomNumber == 0)
@@ -363,24 +365,7 @@ public class ClientThread extends Thread {
 					}
 					break;
 				}
-				case YES_SECRETSENDWORDTO: {
-					String id = st.nextToken();
-					String idTo = st.nextToken();
-					int roomNumber = Integer.parseInt(st.nextToken());
-					try {
-						String secretData = st.nextToken();
-						if (roomNumber == 0) {
-							ct_chatRoom.message.requestFocusInWindow();
-						}
-					} catch (NoSuchElementException e) {
-						if (roomNumber == 0)
-							ct_waitRoom.message.requestFocusInWindow();
-						else
-							ct_chatRoom.message.requestFocusInWindow();
-					}
-					break;
-				}
-
+//				
 				// 추가끝
 
 				case REQ_SENDFILE: {
@@ -563,22 +548,25 @@ public class ClientThread extends Thread {
 			ct_buffer.append(ct_logonID);
 			ct_buffer.append(SEPARATOR);
 			ct_buffer.append(ct_roomNumber);
-			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(data);
-			//ct_buffer.append(ct_logonID + "님이보냄");
-			send(ct_buffer.toString());
-		} catch (IOException e) {
-			System.out.println(e);
+			 ct_buffer.append(SEPARATOR);
+		      ct_buffer.append(data);
+		      send(ct_buffer.toString());
+		    }catch(IOException e){
+		      System.out.println(e);
 		}
 	}
 	
 	
+	
+	
+	
+	
+	
 	// 메세지암호화 추가
 
-	public void requestSecretSendWord(String secretData,String secretwords) {
+	public void requestSecretSendWord(String data) {
 		try {
-			//System.out.println(secretData);
-			//System.out.println(secretwords);
+			
 			ct_buffer.setLength(0);
 			ct_buffer.append(REQ_SECRETSENDWORD);
 			ct_buffer.append(SEPARATOR);
@@ -586,33 +574,15 @@ public class ClientThread extends Thread {
 			ct_buffer.append(SEPARATOR);
 			ct_buffer.append(ct_roomNumber);
 			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(secretData);
-			ct_buffer.append(SEPARATOR);
-			//ct_buffer.append("비밀로 보낸거");
-			send(ct_buffer.toString());
-		} catch (IOException e) {
-			System.out.println(e);
+			for(int i = 0; i < data.length(); i++) {
+		   		  ct_buffer.append(data.charAt(i)+""+(char)(int)(rn.nextInt(26)+97));
+   }
+		     send(ct_buffer.toString());
+		 }catch(IOException e){
+		      System.out.println(e);
 		}
 	}
 
-	public void requestSecretSendWordTo(String secretData, String idTo) {
-		try {
-			ct_buffer.setLength(0);
-			ct_buffer.append(REQ_SECRETSENDWORDTO);
-			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(ct_logonID);
-			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(ct_roomNumber);
-			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(idTo);
-			ct_buffer.append(SEPARATOR);
-			ct_buffer.append(secretData);
-			ct_buffer.append("지금 누가보낸거니?");
-			send(ct_buffer.toString());
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-	}
 
 	// 추가한거 끝 위에까지
 	public void requestSendWordTo(String data, String idTo) {
